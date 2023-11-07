@@ -1,23 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from "./components/Header";
+import Recommend from "./components/Recommend";
+import Visual from "./components/Visual";
+import Tour from "./components/Tour";
+import Ticket from "./components/Ticket";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="wrap">
+      {/* <!-- 상단 영역 --> */}
+      <Header />
+      {/* <!-- 메인 영역 --> */}
+      <div className="main">
+        <Visual />
+        <Recommend />
+        <Tour />
+        <Ticket />
+      </div>
+      {/* <!-- 하단 영역 --> */}
+      <footer className="footer"></footer>
     </div>
   );
 }
