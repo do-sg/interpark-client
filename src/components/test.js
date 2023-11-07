@@ -1,4 +1,4 @@
 function test() {
-  return 1;
+  return 12;
 }
 export default test;
