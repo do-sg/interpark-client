@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import { BtCate } from "../components/ui/buttons";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { Navigation } from "swiper/modules";
@@ -8,13 +9,38 @@ import "swiper/css/navigation";
 import "../styles/recommend.css";
 import "../styles/common.css";
 import { useEffect, useRef, useState } from "react";
+import axios from "axios";
+import styled from "@emotion/styled";
+import { InnerArea, SectionTag } from "./layout/layout";
 
 function Recommend() {
+  function numberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
   // js 코드 자리
   // JSX의 요소를 React에서 참조
   const swiperRef = useRef();
   // JSON 데이터 저장해두고, 자료가 바뀌면 화면을 변경할 리액트 변수를 만든다.
   const [htmlTag, setHtmlTag] = useState([]);
+
+  // 외부 데이터 연동하기 (axios 이용)
+  const axiosJsonData = () => {
+    axios
+      .get("recommend.json")
+      .then(function (res) {
+        console.log(res.data);
+        let arr = [];
+        for (let i = 0; i < res.data.total; i++) {
+          const obj = res.data["good_" + (i + 1)];
+          arr[i] = obj;
+        }
+        console.log(arr);
+        setHtmlTag(arr);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   // 외부 데이터 연동하기 (fetch 이용)
   const getJsonData = () => {
@@ -54,12 +80,13 @@ function Recommend() {
   // use는 Hook이라고 한다. 원하는 시점을 감시하고 실행할 함수
   useEffect(() => {
     // 외부 데이터 불러들이기
-    getJsonData();
+    axiosJsonData();
+    // getJsonData();
   }, []);
 
   return (
-    <section className="recommend">
-      <div className="recommend-inner">
+    <SectionTag pt={0} pb={90}>
+      <InnerArea>
         <div className="recommend-header">
           <h2 className="recommend-title">쇼핑 추천</h2>
           <span className="recommend-txt">
@@ -70,18 +97,16 @@ function Recommend() {
           <div className="recommend-cate">
             <ul className="recommend-list">
               <li>
-                <button className="recommend-cate-bt recommend-cate-bt-active">
-                  쎈딜
-                </button>
+                <BtCate active={true}>쎈딜</BtCate>
               </li>
               <li>
-                <button className="recommend-cate-bt">베스트</button>
+                <BtCate>베스트</BtCate>
               </li>
               <li>
-                <button className="recommend-cate-bt">블프데이</button>
+                <BtCate>블프데이</BtCate>
               </li>
               <li>
-                <button className="recommend-cate-bt">디지털프라자</button>
+                <BtCate>디지털프라자</BtCate>
               </li>
               <li>
                 <a href="#" className="recommend-cate-bt">
@@ -121,7 +146,7 @@ function Recommend() {
                               <li>
                                 <span className="recommend-good-info-price">
                                   <b>{item.discount}%</b>
-                                  <em>{item.price}</em>원
+                                  <em>{numberWithCommas(item.price)}</em>원
                                 </span>
                               </li>
                               <li>
@@ -153,8 +178,8 @@ function Recommend() {
             쇼핑 홈 바로가기
           </a>
         </div>
-      </div>
-    </section>
+      </InnerArea>
+    </SectionTag>
   );
 }
 export default Recommend;

@@ -6,11 +6,59 @@ import "swiper/css/navigation";
 
 import "../styles/tour.css";
 import "../styles/common.css";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
 
 function Tour() {
+  function numberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
   // js 코드 자리
   const swiperRef = useRef();
+
+  // 외부 데이터 연동 (axios 활용)
+  const axiosGetData = () => {
+    axios
+      .get("tour.json")
+      .then(function (res) {
+        console.log(res.data);
+        makeTourSlide(res.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  // 외부 데이터 연동 (fetch 활용)
+  const fetchGetData = () => {
+    fetch("tour.json")
+      .then((res) => res.json())
+      .then((result) => {
+        // console.log(result);
+        // 자료를 출력하자.
+        makeTourSlide(result);
+      })
+      .catch((error) => {
+        // console.log(error);
+      });
+  };
+
+  let [tourHtml, setTourHtml] = useState([]);
+
+  const makeTourSlide = (_data) => {
+    const tourRes = _data;
+
+    let tourArray = [];
+    for (let i = 0; i < tourRes.total; i++) {
+      tourArray[i] = tourRes["tour_" + (i + 1)];
+    }
+    setTourHtml(tourArray);
+  };
+
+  useEffect(() => {
+    axiosGetData();
+    return () => {};
+  }, []);
 
   return (
     <section className="tour">
@@ -53,222 +101,32 @@ function Tour() {
               }}
               className="tour-slide"
             >
-              <SwiperSlide>
-                <div className="tour-slide-item">
-                  <a href="#" className="tour-link">
-                    <div className="tour-img">
-                      <img src="images/t1.jpg" alt="" />
+              {tourHtml.map((item, index) => {
+                return (
+                  <SwiperSlide key={index}>
+                    <div className="tour-slide-item">
+                      <a href={item.url} className="tour-link">
+                        <div className="tour-img">
+                          <img src={item.image} alt="" />
+                        </div>
+                        <div className="tour-info">
+                          <ul className="tour-good-list">
+                            <li>
+                              <span className="tour-good-info-desc">
+                                <em>{item.desc}</em>
+                                <p>{item.title}</p>
+                                <b>{numberWithCommas(item.price)}</b>
+                                원~
+                              </span>
+                            </li>
+                          </ul>
+                        </div>
+                        <button className="tour-plus">{item.special}</button>
+                      </a>
                     </div>
-                    <div className="tour-info">
-                      <ul className="tour-good-list">
-                        <li>
-                          <span className="tour-good-info-desc">
-                            <em>노보리베츠, 도야 온천호텔, 도야호 유람선</em>
-                            <p>
-                              [북해도 4일]노보리베츠 온천+도야+후라노+비에이
-                            </p>
-                            <b>1,099,000</b>
-                            원~
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                    <button className="tour-plus">홍콩</button>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="tour-slide-item">
-                  <a href="#" className="tour-link">
-                    <div className="tour-img">
-                      <img src="images/t1.jpg" alt="" />
-                    </div>
-                    <div className="tour-info">
-                      <ul className="tour-good-list">
-                        <li>
-                          <span className="tour-good-info-desc">
-                            <em>노보리베츠, 도야 온천호텔, 도야호 유람선</em>
-                            <p>
-                              [북해도 4일]노보리베츠 온천+도야+후라노+비에이
-                            </p>
-                            <b>1,099,000</b>
-                            원~
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                    <button className="tour-plus">홍콩</button>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="tour-slide-item">
-                  <a href="#" className="tour-link">
-                    <div className="tour-img">
-                      <img src="images/t1.jpg" alt="" />
-                    </div>
-                    <div className="tour-info">
-                      <ul className="tour-good-list">
-                        <li>
-                          <span className="tour-good-info-desc">
-                            <em>노보리베츠, 도야 온천호텔, 도야호 유람선</em>
-                            <p>
-                              [북해도 4일]노보리베츠 온천+도야+후라노+비에이
-                            </p>
-                            <b>1,099,000</b>
-                            원~
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                    <button className="tour-plus">홍콩</button>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="tour-slide-item">
-                  <a href="#" className="tour-link">
-                    <div className="tour-img">
-                      <img src="images/t1.jpg" alt="" />
-                    </div>
-                    <div className="tour-info">
-                      <ul className="tour-good-list">
-                        <li>
-                          <span className="tour-good-info-desc">
-                            <em>노보리베츠, 도야 온천호텔, 도야호 유람선</em>
-                            <p>
-                              [북해도 4일]노보리베츠 온천+도야+후라노+비에이
-                            </p>
-                            <b>1,099,000</b>
-                            원~
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                    <button className="tour-plus">홍콩</button>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="tour-slide-item">
-                  <a href="#" className="tour-link">
-                    <div className="tour-img">
-                      <img src="images/t1.jpg" alt="" />
-                    </div>
-                    <div className="tour-info">
-                      <ul className="tour-good-list">
-                        <li>
-                          <span className="tour-good-info-desc">
-                            <em>노보리베츠, 도야 온천호텔, 도야호 유람선</em>
-                            <p>
-                              [북해도 4일]노보리베츠 온천+도야+후라노+비에이
-                            </p>
-                            <b>1,099,000</b>
-                            원~
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                    <button className="tour-plus">홍콩</button>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="tour-slide-item">
-                  <a href="#" className="tour-link">
-                    <div className="tour-img">
-                      <img src="images/t1.jpg" alt="" />
-                    </div>
-                    <div className="tour-info">
-                      <ul className="tour-good-list">
-                        <li>
-                          <span className="tour-good-info-desc">
-                            <em>노보리베츠, 도야 온천호텔, 도야호 유람선</em>
-                            <p>
-                              [북해도 4일]노보리베츠 온천+도야+후라노+비에이
-                            </p>
-                            <b>1,099,000</b>
-                            원~
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                    <button className="tour-plus">홍콩</button>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="tour-slide-item">
-                  <a href="#" className="tour-link">
-                    <div className="tour-img">
-                      <img src="images/t1.jpg" alt="" />
-                    </div>
-                    <div className="tour-info">
-                      <ul className="tour-good-list">
-                        <li>
-                          <span className="tour-good-info-desc">
-                            <em>노보리베츠, 도야 온천호텔, 도야호 유람선</em>
-                            <p>
-                              [북해도 4일]노보리베츠 온천+도야+후라노+비에이
-                            </p>
-                            <b>1,099,000</b>
-                            원~
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                    <button className="tour-plus">홍콩</button>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="tour-slide-item">
-                  <a href="#" className="tour-link">
-                    <div className="tour-img">
-                      <img src="images/t1.jpg" alt="" />
-                    </div>
-                    <div className="tour-info">
-                      <ul className="tour-good-list">
-                        <li>
-                          <span className="tour-good-info-desc">
-                            <em>노보리베츠, 도야 온천호텔, 도야호 유람선</em>
-                            <p>
-                              [북해도 4일]노보리베츠 온천+도야+후라노+비에이
-                            </p>
-                            <b>1,099,000</b>
-                            원~
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                    <button className="tour-plus">홍콩</button>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="tour-slide-item">
-                  <a href="#" className="tour-link">
-                    <div className="tour-img">
-                      <img src="images/t1.jpg" alt="" />
-                    </div>
-                    <div className="tour-info">
-                      <ul className="tour-good-list">
-                        <li>
-                          <span className="tour-good-info-desc">
-                            <em>노보리베츠, 도야 온천호텔, 도야호 유람선</em>
-                            <p>
-                              [북해도 4일]노보리베츠 온천+도야+후라노+비에이
-                            </p>
-                            <b>1,099,000</b>
-                            원~
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                    <button className="tour-plus">홍콩</button>
-                  </a>
-                </div>
-              </SwiperSlide>
+                  </SwiperSlide>
+                );
+              })}
             </Swiper>
 
             <button className="slide-prev-bt">
@@ -279,6 +137,7 @@ function Tour() {
             </button>
           </div>
         </div>
+
         <div className="tour-footer">
           <a href="#" className="tour-footer-bt">
             투어 홈 바로가기

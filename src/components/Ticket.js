@@ -6,10 +6,53 @@ import "swiper/css/navigation";
 
 import "../styles/ticket.css";
 import "../styles/common.css";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
 
 function Ticket() {
   const swiperRef = useRef();
+
+  const axiosGetData = () => {
+    axios
+      .get("ticket.json")
+      .then(function (res) {
+        console.log(res.data);
+        makeTicketSlide(res.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const fetchGetData = () => {
+    fetch("ticket.json")
+      .then((res) => res.json())
+      .then((result) => {
+        // console.log(result);
+        // 자료를 출력하자.
+        makeTicketSlide(result);
+      })
+      .catch((error) => {
+        // console.log(error);
+      });
+  };
+
+  let [ticketHtml, setTicketHtml] = useState([]);
+
+  const makeTicketSlide = (_data) => {
+    const ticketRes = _data;
+
+    let ticketArray = [];
+    for (let i = 0; i < ticketRes.total; i++) {
+      ticketArray[i] = ticketRes["ticket_" + (i + 1)];
+    }
+    setTicketHtml(ticketArray);
+  };
+
+  useEffect(() => {
+    axiosGetData();
+    return () => {};
+  }, []);
 
   return (
     <section className="ticket">
@@ -62,240 +105,36 @@ function Ticket() {
               }}
               className="ticket-slide"
             >
-              <SwiperSlide>
-                <div className="ticket-slide-item">
-                  <a href="#" className="ticket-link">
-                    <div className="ticket-img">
-                      <img src="images/tk1.gif" alt="" />
+              {ticketHtml.map((item, index) => {
+                return (
+                  <SwiperSlide key={index}>
+                    <div className="ticket-slide-item">
+                      <a href={item.url} className="ticket-link">
+                        <div className="ticket-img">
+                          <img src={item.image} alt="" />
+                        </div>
+                        <div>
+                          <span className="ticket-rank">{item.rank}</span>
+                        </div>
+                        <div className="ticket-info">
+                          <ul className="ticket-good-list">
+                            <li>
+                              <span className="ticket-info-desc">
+                                {item.title}
+                                <b>{item.place}</b>
+                                <p>{item.date}</p>
+                              </span>
+                            </li>
+                            <li>
+                              <p className="ticket-seat">{item.special}</p>
+                            </li>
+                          </ul>
+                        </div>
+                      </a>
                     </div>
-                    <div>
-                      <span className="ticket-rank">1</span>
-                    </div>
-                    <div className="ticket-info">
-                      <ul className="ticket-good-list">
-                        <li>
-                          <span className="ticket-info-desc">
-                            태양의서커스 [루치아]
-                            <b>잠실종합운동장 내 빅탑</b>
-                            <p>2023.10.25 - 2023.12.31</p>
-                          </span>
-                        </li>
-                        <li>
-                          <p className="ticket-seat">좌석우위</p>
-                        </li>
-                      </ul>
-                    </div>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="ticket-slide-item">
-                  <a href="#" className="ticket-link">
-                    <div className="ticket-img">
-                      <img src="images/tk1.gif" alt="" />
-                    </div>
-                    <div>
-                      <span className="ticket-rank">1</span>
-                    </div>
-                    <div className="ticket-info">
-                      <ul className="ticket-good-list">
-                        <li>
-                          <span className="ticket-info-desc">
-                            태양의서커스 [루치아]
-                            <b>잠실종합운동장 내 빅탑</b>
-                            <p>2023.10.25 - 2023.12.31</p>
-                          </span>
-                        </li>
-                        <li>
-                          <p className="ticket-seat">좌석우위</p>
-                        </li>
-                      </ul>
-                    </div>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="ticket-slide-item">
-                  <a href="#" className="ticket-link">
-                    <div className="ticket-img">
-                      <img src="images/tk1.gif" alt="" />
-                    </div>
-                    <div>
-                      <span className="ticket-rank">1</span>
-                    </div>
-                    <div className="ticket-info">
-                      <ul className="ticket-good-list">
-                        <li>
-                          <span className="ticket-info-desc">
-                            태양의서커스 [루치아]
-                            <b>잠실종합운동장 내 빅탑</b>
-                            <p>2023.10.25 - 2023.12.31</p>
-                          </span>
-                        </li>
-                        <li>
-                          <p className="ticket-seat">좌석우위</p>
-                        </li>
-                      </ul>
-                    </div>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="ticket-slide-item">
-                  <a href="#" className="ticket-link">
-                    <div className="ticket-img">
-                      <img src="images/tk1.gif" alt="" />
-                    </div>
-                    <div>
-                      <span className="ticket-rank">1</span>
-                    </div>
-                    <div className="ticket-info">
-                      <ul className="ticket-good-list">
-                        <li>
-                          <span className="ticket-info-desc">
-                            태양의서커스 [루치아]
-                            <b>잠실종합운동장 내 빅탑</b>
-                            <p>2023.10.25 - 2023.12.31</p>
-                          </span>
-                        </li>
-                        <li>
-                          <p className="ticket-seat">좌석우위</p>
-                        </li>
-                      </ul>
-                    </div>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="ticket-slide-item">
-                  <a href="#" className="ticket-link">
-                    <div className="ticket-img">
-                      <img src="images/tk1.gif" alt="" />
-                    </div>
-                    <div>
-                      <span className="ticket-rank">1</span>
-                    </div>
-                    <div className="ticket-info">
-                      <ul className="ticket-good-list">
-                        <li>
-                          <span className="ticket-info-desc">
-                            태양의서커스 [루치아]
-                            <b>잠실종합운동장 내 빅탑</b>
-                            <p>2023.10.25 - 2023.12.31</p>
-                          </span>
-                        </li>
-                        <li>
-                          <p className="ticket-seat">좌석우위</p>
-                        </li>
-                      </ul>
-                    </div>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="ticket-slide-item">
-                  <a href="#" className="ticket-link">
-                    <div className="ticket-img">
-                      <img src="images/tk1.gif" alt="" />
-                    </div>
-                    <div>
-                      <span className="ticket-rank">1</span>
-                    </div>
-                    <div className="ticket-info">
-                      <ul className="ticket-good-list">
-                        <li>
-                          <span className="ticket-info-desc">
-                            태양의서커스 [루치아]
-                            <b>잠실종합운동장 내 빅탑</b>
-                            <p>2023.10.25 - 2023.12.31</p>
-                          </span>
-                        </li>
-                        <li>
-                          <p className="ticket-seat">좌석우위</p>
-                        </li>
-                      </ul>
-                    </div>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="ticket-slide-item">
-                  <a href="#" className="ticket-link">
-                    <div className="ticket-img">
-                      <img src="images/tk1.gif" alt="" />
-                    </div>
-                    <div>
-                      <span className="ticket-rank">1</span>
-                    </div>
-                    <div className="ticket-info">
-                      <ul className="ticket-good-list">
-                        <li>
-                          <span className="ticket-info-desc">
-                            태양의서커스 [루치아]
-                            <b>잠실종합운동장 내 빅탑</b>
-                            <p>2023.10.25 - 2023.12.31</p>
-                          </span>
-                        </li>
-                        <li>
-                          <p className="ticket-seat">좌석우위</p>
-                        </li>
-                      </ul>
-                    </div>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="ticket-slide-item">
-                  <a href="#" className="ticket-link">
-                    <div className="ticket-img">
-                      <img src="images/tk1.gif" alt="" />
-                    </div>
-                    <div>
-                      <span className="ticket-rank">1</span>
-                    </div>
-                    <div className="ticket-info">
-                      <ul className="ticket-good-list">
-                        <li>
-                          <span className="ticket-info-desc">
-                            태양의서커스 [루치아]
-                            <b>잠실종합운동장 내 빅탑</b>
-                            <p>2023.10.25 - 2023.12.31</p>
-                          </span>
-                        </li>
-                        <li>
-                          <p className="ticket-seat">좌석우위</p>
-                        </li>
-                      </ul>
-                    </div>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="ticket-slide-item">
-                  <a href="#" className="ticket-link">
-                    <div className="ticket-img">
-                      <img src="images/tk1.gif" alt="" />
-                    </div>
-                    <div>
-                      <span className="ticket-rank">1</span>
-                    </div>
-                    <div className="ticket-info">
-                      <ul className="ticket-good-list">
-                        <li>
-                          <span className="ticket-info-desc">
-                            태양의서커스 [루치아]
-                            <b>잠실종합운동장 내 빅탑</b>
-                            <p>2023.10.25 - 2023.12.31</p>
-                          </span>
-                        </li>
-                        <li>
-                          <p className="ticket-seat">좌석우위</p>
-                        </li>
-                      </ul>
-                    </div>
-                  </a>
-                </div>
-              </SwiperSlide>
+                  </SwiperSlide>
+                );
+              })}
             </Swiper>
 
             <button className="slide-prev-bt">
